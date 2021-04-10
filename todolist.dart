@@ -12,9 +12,11 @@ List<Task> tasks = [
 int count = tasks.length;
 
 class ToDoList {
-  static void showList(){
-    for (Task task in tasks){
-      print(task.toString());
-    }
+  static List<Task> getTasks(){
+    return tasks;
+  }
+
+  static void removeById(int id){
+    tasks.removeWhere((element) => element.id == id);
   }
 }

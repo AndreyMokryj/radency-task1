@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'todolist.dart';
+import 'task.dart';
 
 void main() {
   bool exit = false;
@@ -9,16 +10,25 @@ void main() {
   stdout.writeln('exit, quit, q – exit app');
 
   while (!exit) {
-
+    stdout.write('\$ ');
     String input = stdin.readLineSync();
     if(quitCommands.contains(input)) {
       exit = true;
     } else {
       if(input == "ls"){
-        ToDoList.showList();
+        for (Task task in tasks){
+          print(task.toString());
+        }
       }
 
-      // stdout.writeln('You typed: $input');
+      if(input.startsWith("rm ")){
+        int id = int.tryParse(input.split(" ")[1]);
+        if(id != null){
+          ToDoList.removeById(id);
+        } else {
+          print("ID must be integer!");
+        }
+      }
     }
   }
 }
