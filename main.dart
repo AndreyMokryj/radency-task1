@@ -12,6 +12,7 @@ void main() {
   while (!exit) {
     stdout.write('\$ ');
     String input = stdin.readLineSync();
+
     if(quitCommands.contains(input)) {
       exit = true;
     } else {
@@ -21,20 +22,42 @@ void main() {
         }
       }
 
+      if(input.startsWith("add (")){
+        List<String> entries =  input.replaceAll("add (", "")
+        .replaceAll(" ", "")
+        .replaceAll(", ", ",")
+        .replaceAll("),(", ")(")
+        .replaceAll(")", "")
+        .split("(");
+        // print(entries[0]);
+        // print(entries[1]);
+
+        List<Map> maps = [];
+        entries.forEach((element) {
+          List<String> vaues = element.split(",");
+          maps.add({
+            "name" : vaues[0],
+            "category" : vaues[1],
+            "repeat" : vaues.length > 2 ? vaues[2] : null,
+          });
+        });
+
+        ToDoList.addAll(maps);
+      }
+
       if(input.startsWith("rm ")){
         int id = int.tryParse(input.split(" ")[1]);
         if(id != null){
           ToDoList.removeById(id);
         } else {
-          print("ID must be integer!");
+          print("Incorrect command!");
         }
       }
 
       if(input == "cs"){
         Map map = ToDoList.getCategorySummary();
-        // for(map in maps)
         map.forEach((key, value) {
-          print("$key : $value tasks");
+          print("Category $key : $value tasks");
         });
       }
     }
