@@ -19,4 +19,18 @@ class ToDoList {
   static void removeById(int id){
     tasks.removeWhere((element) => element.id == id);
   }
+
+  static Map<String, int> getCategorySummary(){
+    Map<String, int> categories = {};
+    for(Task task in tasks){
+      String key = task.category;
+      if(categories.containsKey(key)){
+        categories[key]++;
+      } else {
+        categories[key] = 1;
+      }
+    }
+
+    return categories;
+  }
 }

@@ -29,6 +29,14 @@ void main() {
           print("ID must be integer!");
         }
       }
+
+      if(input == "cs"){
+        Map map = ToDoList.getCategorySummary();
+        // for(map in maps)
+        map.forEach((key, value) {
+          print("$key : $value tasks");
+        });
+      }
     }
   }
 }
