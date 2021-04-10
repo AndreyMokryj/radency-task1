@@ -1,17 +1,26 @@
 import 'dart:io';
-import 'package:args/args.dart';
+import 'todolist.dart';
 
-main(List<String> arguments) {
-  exitCode = 0;
-  final parser = ArgParser()
-    ..addOption('zip', abbr: 'z')
-    ..addOption('country', abbr: 'c', defaultsTo: 'de')
-    // ..addCommand('add')
-  ;
+void main() {
+  bool exit = false;
 
-  final argResults = parser.parse(arguments);
+  stdout.writeln('Available commands:');
+  stdout.writeln('ls – get list of tasks');
+  stdout.writeln('exit, quit, q – exit app');
 
-  print(argResults['zip']);
-  print(arguments[0]);
-  // weatherCli(argResults['zip'], argResults['country']);
+  while (!exit) {
+
+    String input = stdin.readLineSync();
+    if(quitCommands.contains(input)) {
+      exit = true;
+    } else {
+      if(input == "ls"){
+        ToDoList.showList();
+      }
+
+      // stdout.writeln('You typed: $input');
+    }
+  }
 }
+
+final quitCommands = ["exit", "qiut", "q"];
