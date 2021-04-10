@@ -5,32 +5,31 @@ import 'task.dart';
 void main() {
   bool exit = false;
 
-  stdout.writeln('Available commands:');
-  stdout.writeln('ls – get list of tasks');
-  stdout.writeln('exit, quit, q – exit app');
+  printHelp();
 
   while (!exit) {
     stdout.write('\$ ');
     String input = stdin.readLineSync();
+    String text = input
+      .replaceAll(" ", "")
+      .replaceFirst("rm", "rm ");
 
-    if(quitCommands.contains(input)) {
+    if(quitCommands.contains(text)) {
       exit = true;
     } else {
-      if(input == "ls"){
+      if(text == "ls"){
         for (Task task in tasks){
           print(task.toString());
         }
       }
 
-      if(input.startsWith("add (")){
-        List<String> entries =  input.replaceAll("add (", "")
-        .replaceAll(" ", "")
+      if(text.startsWith("add(")){
+        List<String> entries =  text.replaceAll("add(", "")
+        // .replaceAll(" ", "")
         .replaceAll(", ", ",")
         .replaceAll("),(", ")(")
         .replaceAll(")", "")
         .split("(");
-        // print(entries[0]);
-        // print(entries[1]);
 
         List<Map> maps = [];
         entries.forEach((element) {
@@ -45,23 +44,41 @@ void main() {
         ToDoList.addAll(maps);
       }
 
-      if(input.startsWith("rm ")){
-        int id = int.tryParse(input.split(" ")[1]);
+      if(text.startsWith("rm ")){
+        int id = int.tryParse(text.split(" ")[1]);
         if(id != null){
           ToDoList.removeById(id);
         } else {
-          print("Incorrect command!");
+          print("ID must be integer!");
+          printHelp();
         }
       }
 
-      if(input == "cs"){
+      if(text == "cs"){
         Map map = ToDoList.getCategorySummary();
         map.forEach((key, value) {
           print("Category $key : $value tasks");
         });
       }
+
+      if(helpCommands.contains(text)) {
+        printHelp();
+      }
     }
   }
 }
 
+void printHelp(){
+  print('Available commands:');
+  print('add(<name>, <category>[, <repeatDay>])[, (<name>, <category>[, <repeatDay>])] – add one or more tasks');
+  print('cs – show category summary');
+  print('exit – exit app');
+  print('help, h – show this message');
+  print('ls – show list of tasks');
+  print('rm <id> – delete task by id');
+  print('quit, q – exit app');
+}
+
 final quitCommands = ["exit", "qiut", "q"];
+
+final helpCommands = ["h", "help"];
